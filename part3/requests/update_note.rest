@@ -1,0 +1,27 @@
+PUT http://localhost:3001/api/notes/1
+Content-Type: application/json
+
+{
+    "id": 1,
+    "content": "uusi arvo",
+    "important": false
+}
+
+
+### Rikotaan id 2
+PUT http://localhost:3001/api/notes/2
+Content-Type: application/json
+
+{
+    "content": "2 meni rikki"
+}
+
+
+### Päivitetään id 3 -> 5
+PUT http://localhost:3001/api/notes/3
+Content-Type: application/json
+
+{
+    "id": 5,
+    "content": "3 muuttui 5"
+}

@@ -1,0 +1,7 @@
+GET http://localhost:3001/api/notes/1
+
+### mitä tämä urli tekee
+# voidaan myös tähän laittaa kommenttina
+# get note id 2
+GET http://localhost:3001/api/notes/2
+

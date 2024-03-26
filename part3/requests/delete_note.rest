@@ -1,0 +1,10 @@
+DELETE http://localhost:3001/api/notes/1
+
+### Delete note id 2
+DELETE http://localhost:3001/api/notes/2
+
+### Delete note id 3
+DELETE http://localhost:3001/api/notes/3
+
+### Delete note id 24
+DELETE http://localhost:3001/api/notes/4

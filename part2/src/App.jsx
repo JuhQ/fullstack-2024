@@ -45,7 +45,7 @@ const App = () => {
     setError("")
 
     noteService
-      .update(2134, changedNote)
+      .update(id, changedNote)
       .then(data => {
         setNotes(notes.map(note => note.id !== id ? note : data))
       })
