@@ -6,5 +6,7 @@ DELETE http://localhost:3001/api/notes/2
 ### Delete note id 3
 DELETE http://localhost:3001/api/notes/3
 
-### Delete note id 24
+### Delete note id 4
+# lisää monen rivin kommentteja
+# kunhan laittaa # -merkin rivin alkuun
 DELETE http://localhost:3001/api/notes/4

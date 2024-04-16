@@ -1,0 +1,5 @@
+GET http://localhost:3001/unknown/endpoint
+
+### yritetään hakea useria, mutta user routea ei ole määritelty
+GET http://localhost:3001/api/users/500
+

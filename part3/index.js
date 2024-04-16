@@ -29,8 +29,30 @@ let notes = [
 const app = express()
 
 app.use(express.json())
-// app.use(helmet())
+app.use(helmet())
 app.use(cors())
+
+const requestLogger = (request, response, next) => {
+    console.log('Method:', request.method)
+    console.log('Path:  ', request.path)
+    console.log('Body:  ', request.body)
+    console.log("kello: ", new Date())
+    console.log('---')
+    next()
+}
+
+
+app.use(requestLogger)
+
+
+const generateId = () => {
+    const lastId = notes.length ?
+        Math.max(...notes.map(({ id }) => id)) :
+        0
+
+    return lastId + 1
+}
+
 
 app.get("/", (request, response) => {
     response.send("<h1>hello world</h1>")
@@ -42,7 +64,9 @@ app.get("/api/notes", (request, response) => {
 
 // /api/notes/10 :id = 10, -> request.params = {id: 10}
 app.get("/api/notes/:id", (request, response) => {
+    console.log("request.params", request.params)
     const id = Number(request.params.id)
+    console.log("id", id)
     const note = notes.find((n) => Number(n.id) === id)
 
     if (note) {
@@ -67,11 +91,23 @@ app.delete("/api/notes/:id", (request, response) => {
 
 
 app.post("/api/notes", (request, response) => {
-    const lastId = notes.length ?
-        Math.max(...notes.map(({id}) => id)) :
-        0
 
-    const newNote = {...request.body, id: lastId + 1}
+    console.log("request.body", request.body)
+
+    if (!Object.entries(request.body).length) {
+        response.status(400).end()
+        return
+    }
+
+    console.log("mennään tässä")
+
+    // spread syntax
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
+    const newNote = {
+        ...request.body,
+        id: generateId()
+    }
+
     notes.push(newNote)
 
     response.status(201).json(newNote)
@@ -82,8 +118,8 @@ app.put("/api/notes/:id", (request, response) => {
     const body = request.body
 
     notes = notes.map((note) => {
-        if(Number(note.id) === id) {
-            return {...body, id}
+        if (Number(note.id) === id) {
+            return { ...body, id }
         }
 
         return note
@@ -92,10 +128,19 @@ app.put("/api/notes/:id", (request, response) => {
     response.json(body)
 })
 
+
+const unknownEndpoint = (request, response) => {
+    const path = request.path
+    response.status(404).send({ error: 'unknown endpoint', path })
+  }
+
+  app.use(unknownEndpoint)
+
+
 const PORT = 3001
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}.`)
-})
+    console.log(`Server running on port http://localhost:${PORT}.`)
+});
 
 console.log("hello world");
 

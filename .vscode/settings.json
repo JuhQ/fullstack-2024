@@ -1,0 +1,5 @@
+{
+    "trailing-spaces.trimOnSave": true,
+    "rest-client.enableTelemetry": false,
+    "rest-client.previewOption": "full"
+}

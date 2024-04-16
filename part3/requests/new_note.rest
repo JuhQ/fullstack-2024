@@ -5,3 +5,34 @@ Content-Type: application/json
     "content": "REST is easy",
     "important": true
 }
+
+### Lähetetään jokin rikkinäinen viesti
+# Tässä esimerkissä poistin content avaimen lähetettävästä objektista
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "": "REST is easy",
+    "important": true
+}
+
+### Headersit pitää olla heti osoitteen jälkeen
+# ei tyhjiä rivejä välissä
+POST http://localhost:3001/api/notes
+
+Content-Type: application/json
+
+{
+    "": "REST is easy",
+    "important": true
+}
+
+### Headersit pitää olla application/json
+# text/plain rikkoo
+POST http://localhost:3001/api/notes
+Content-Type: text/plain
+
+{
+    "": "REST is easy",
+    "important": true
+}
