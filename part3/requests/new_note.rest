@@ -6,6 +6,49 @@ Content-Type: application/json
     "important": true
 }
 
+### Kokeillaan tuotantoa
+POST https://fullstack-2024-1.onrender.com/api/notes
+Content-Type: application/json
+
+{
+    "content": "Render.com is easy",
+    "important": true
+}
+
+
+
+### Lähetetään content arvo tyhjänä
+# validoinnin tulisi estää tämä
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "",
+    "important": true
+}
+
+
+### Lähetetään content arvo liian lyhyenä
+# validoinnin tulisi estää tämä
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "as",
+    "important": true
+}
+
+### Lähetetään boolean arvo tyhjänä
+# validoinnin tulisi estää tämä
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "hello"
+}
+
+
+
 ### Lähetetään jokin rikkinäinen viesti
 # Tässä esimerkissä poistin content avaimen lähetettävästä objektista
 POST http://localhost:3001/api/notes

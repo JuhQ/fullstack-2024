@@ -5,3 +5,7 @@ GET http://localhost:3001/api/notes/1
 # get note id 2
 GET http://localhost:3001/api/notes/2
 
+
+### Kokeillaan tuotantoa
+GET https://fullstack-2024-1.onrender.com/api/notes/2
+

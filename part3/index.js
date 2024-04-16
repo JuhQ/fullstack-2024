@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors")
 const helmet = require("helmet")
+const { body, validationResult } = require("express-validator")
 
 let notes = [
     {
@@ -37,6 +38,8 @@ const requestLogger = (request, response, next) => {
     console.log('Path:  ', request.path)
     console.log('Body:  ', request.body)
     console.log("kello: ", new Date())
+    console.log('---')
+    console.log("render vai localhost?")
     console.log('---')
     next()
 }
@@ -89,29 +92,35 @@ app.delete("/api/notes/:id", (request, response) => {
     response.status(204).end()
 })
 
-
-app.post("/api/notes", (request, response) => {
-
-    console.log("request.body", request.body)
-
-    if (!Object.entries(request.body).length) {
-        response.status(400).end()
-        return
+/*
+    {
+        content: "",
+        important: true
     }
+*/
+app.post("/api/notes",
+    body("content").notEmpty().isLength({ min: 3, max: 150 }),
+    body("important").isBoolean(),
+    (request, response, next) => {
+        const result = validationResult(request);
 
-    console.log("mennään tässä")
+        if (!result.isEmpty()) {
+            return next(result.errors.map(({ msg, path }) => `${path}: ${msg}`))
+        }
 
-    // spread syntax
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
-    const newNote = {
-        ...request.body,
-        id: generateId()
-    }
+        console.log("mennään tässä")
 
-    notes.push(newNote)
+        // spread syntax
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
+        const newNote = {
+            ...request.body,
+            id: generateId()
+        }
 
-    response.status(201).json(newNote)
-})
+        notes.push(newNote)
+
+        response.status(201).json(newNote)
+    })
 
 app.put("/api/notes/:id", (request, response) => {
     const id = Number(request.params.id)
@@ -132,14 +141,19 @@ app.put("/api/notes/:id", (request, response) => {
 const unknownEndpoint = (request, response) => {
     const path = request.path
     response.status(404).send({ error: 'unknown endpoint', path })
-  }
+}
 
-  app.use(unknownEndpoint)
+app.use(unknownEndpoint)
 
+const handleErrors = (error, request, response, next) => {
+    response.status(400).json({error})
+}
+
+app.use(handleErrors)
 
 const PORT = 3001
 app.listen(PORT, () => {
-    console.log(`Server running on port http://localhost:${PORT}.`)
+    console.log(`Server running on http://localhost:${PORT}.`)
 });
 
 console.log("hello world");
