@@ -29,6 +29,7 @@ let notes = [
 
 const app = express()
 
+app.use(express.static("dist"))
 app.use(express.json())
 app.use(helmet())
 app.use(cors())
@@ -56,10 +57,11 @@ const generateId = () => {
     return lastId + 1
 }
 
-
+/*
 app.get("/", (request, response) => {
     response.send("<h1>hello world</h1>")
 })
+*/
 
 app.get("/api/notes", (request, response) => {
     response.json(notes)
