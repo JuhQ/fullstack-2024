@@ -1,4 +1,4 @@
-PUT http://localhost:3001/api/notes/1
+PUT http://localhost:3001/api/notes/6627d84f0170b4b042943598
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
 
 
 ### Rikotaan id 2
-PUT http://localhost:3001/api/notes/2
+PUT http://localhost:3001/api/notes/6627d84f0170b4b042943598
 Content-Type: application/json
 
 {
@@ -18,7 +18,7 @@ Content-Type: application/json
 
 
 ### Päivitetään id 3 -> 5
-PUT http://localhost:3001/api/notes/3
+PUT http://localhost:3001/api/notes/6627d84f0170b4b042943598
 Content-Type: application/json
 
 {

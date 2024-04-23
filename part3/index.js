@@ -2,30 +2,7 @@ const express = require("express");
 const cors = require("cors")
 const helmet = require("helmet")
 const { body, validationResult } = require("express-validator")
-
-let notes = [
-    {
-        id: 1,
-        content: "HTML is easy",
-        important: true
-    },
-    {
-        id: 2,
-        content: "Browser can execute only JavaScript",
-        important: false
-    },
-    {
-        id: 3,
-        content: "GET and POST are the most important methods of HTTP protocol",
-        important: true
-    },
-    {
-        id: 4,
-        content: "Ollaan sisällä opiskelemassa javascriptiä kun ulkona on aivan mahtava sää",
-        important: true
-    }
-]
-
+const Note = require("./models/note")
 
 const app = express()
 
@@ -48,58 +25,42 @@ const requestLogger = (request, response, next) => {
 
 app.use(requestLogger)
 
-
-const generateId = () => {
-    const lastId = notes.length ?
-        Math.max(...notes.map(({ id }) => id)) :
-        0
-
-    return lastId + 1
-}
-
-/*
-app.get("/", (request, response) => {
-    response.send("<h1>hello world</h1>")
-})
-*/
-
-app.get("/api/notes", (request, response) => {
-    response.json(notes)
+app.get("/api/notes", (request, response, next) => {
+    Note.find({})
+        .then(notes => response.json(notes))
+        .catch(next)
 })
 
 // /api/notes/10 :id = 10, -> request.params = {id: 10}
-app.get("/api/notes/:id", (request, response) => {
+app.get("/api/notes/:id", (request, response, next) => {
     console.log("request.params", request.params)
-    const id = Number(request.params.id)
-    console.log("id", id)
-    const note = notes.find((n) => Number(n.id) === id)
 
-    if (note) {
-        response.json(note)
-    } else {
-        response.status(404).json({
-            error: "no note found",
-            request: {
-                id: request.params.id
+    Note.findById(request.params.id)
+        .then(note => {
+            if (note) {
+                response.json(note)
+            } else {
+                response.status(404).json({
+                    error: "no note found",
+                    request: {
+                        id: request.params.id
+                    }
+                })
             }
         })
-    }
+        .catch((error) => {
+            next(new Error("malformatted id"))
+        })
+
 })
 
-app.delete("/api/notes/:id", (request, response) => {
-    const id = Number(request.params.id)
-
-    notes = notes.filter((note) => Number(note.id) !== id)
-
-    response.status(204).end()
+app.delete("/api/notes/:id", (request, response, next) => {
+    Note.deleteOne({ _id: request.params.id }).then(() => {
+        response.status(204).end()
+    })
+        .catch(next)
 })
 
-/*
-    {
-        content: "",
-        important: true
-    }
-*/
 app.post("/api/notes",
     body("content").notEmpty().isLength({ min: 3, max: 150 }),
     body("important").isBoolean(),
@@ -114,29 +75,32 @@ app.post("/api/notes",
 
         // spread syntax
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
-        const newNote = {
-            ...request.body,
-            id: generateId()
-        }
+        const note = new Note({
+            content: body.content,
+            important: body.important || false
+        })
 
-        notes.push(newNote)
-
-        response.status(201).json(newNote)
+        note.save()
+            .then(result => {
+                console.log('note saved!')
+                console.log("result", result)
+                response.status(201).json(result)
+            })
+            .catch(next)
     })
 
-app.put("/api/notes/:id", (request, response) => {
-    const id = Number(request.params.id)
-    const body = request.body
+app.put("/api/notes/:id", (request, response, next) => {
+    const { id } = request.body
+    const note = {
+        content: request.body.content,
+        impotant: request.body.important || false
+    }
 
-    notes = notes.map((note) => {
-        if (Number(note.id) === id) {
-            return { ...body, id }
-        }
-
-        return note
-    })
-
-    response.json(body)
+    Note.findByIdAndUpdate(id, note, { new: true })
+        .then((result) => {
+            response.json(result)
+        })
+        .catch(next)
 })
 
 
@@ -148,7 +112,8 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint)
 
 const handleErrors = (error, request, response, next) => {
-    response.status(400).json({error})
+    console.error(error)
+    response.status(400).json({ error })
 }
 
 app.use(handleErrors)

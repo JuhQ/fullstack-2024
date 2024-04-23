@@ -1,5 +1,9 @@
 {
     "trailing-spaces.trimOnSave": true,
     "rest-client.enableTelemetry": false,
-    "rest-client.previewOption": "full"
+    "rest-client.previewOption": "full",
+    "editor.rulers": [
+        80,
+        120
+    ]
 }

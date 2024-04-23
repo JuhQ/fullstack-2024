@@ -1,4 +1,4 @@
-DELETE http://localhost:3001/api/notes/1
+DELETE http://localhost:3001/api/notes/6627d7fe0170b4b042943594
 
 ### Delete note id 2
 DELETE http://localhost:3001/api/notes/2

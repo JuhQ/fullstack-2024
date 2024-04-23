@@ -1,11 +1,11 @@
-GET http://localhost:3001/api/notes/1
+GET http://localhost:3001/api/notes/6627d84f0170b4b042943598
 
 ### mitä tämä urli tekee
 # voidaan myös tähän laittaa kommenttina
 # get note id 2
-GET http://localhost:3001/api/notes/2
+GET http://localhost:3001/api/notes/6627d84f0170b4b042943598
 
 
 ### Kokeillaan tuotantoa
-GET https://fullstack-2024-1.onrender.com/api/notes/2
+GET https://fullstack-2024-1.onrender.com/api/notes/6627d84f0170b4b042943598
 

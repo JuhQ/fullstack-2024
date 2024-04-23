@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Note from './components/Note'
 import Notification from './components/Notification'
 import noteService from './services/notes'
+import Country from './components/Country'
 
 const App = () => {
   const [notes, setNotes] = useState(null)
@@ -71,9 +72,12 @@ const App = () => {
     ? notes
     : notes.filter(note => note.important)
 
+  return <Country />
 
   return (
     <div>
+
+      <Country />
       <h1>Notes</h1>
 
       {error.length > 0 && <Notification message={`Virhe tapahtui! ${error}`} />}
