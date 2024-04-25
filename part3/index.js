@@ -71,13 +71,15 @@ app.post("/api/notes",
             return next(result.errors.map(({ msg, path }) => `${path}: ${msg}`))
         }
 
-        console.log("mennään tässä")
+        console.log("body", request.body)
+        console.log("body content", request.body.content)
+        console.log("body important", request.body.important)
 
         // spread syntax
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
         const note = new Note({
-            content: body.content,
-            important: body.important || false
+            content: request.body.content,
+            important: request.body.important || false
         })
 
         note.save()
@@ -96,7 +98,7 @@ app.put("/api/notes/:id", (request, response, next) => {
         impotant: request.body.important || false
     }
 
-    Note.findByIdAndUpdate(id, note, { new: true })
+    Note.findByIdAndUpdate(id, note, { new: true, runValidators: true, context: 'query' })
         .then((result) => {
             response.json(result)
         })
@@ -113,7 +115,7 @@ app.use(unknownEndpoint)
 
 const handleErrors = (error, request, response, next) => {
     console.error(error)
-    response.status(400).json({ error })
+    response.status(400).json({ error: error.message || error })
 }
 
 app.use(handleErrors)
