@@ -1,21 +1,21 @@
 const mongoose = require('mongoose');
+const logger = require('./utils/logger');
+const config = require('./utils/config');
 
 if (process.argv.length < 3) {
-  console.log('give password as argument');
+  logger.info('give password as argument');
   process.exit(1);
 }
 
-const password = process.argv[2];
-
-console.log('process.argv', process.argv);
+logger.info('process.argv', process.argv);
 
 /*
 const [nodecommand, nodefile, ...arguments] = process.argv
 const [password] = arguments
-console.log("arguments", arguments)
+logger.info("arguments", arguments)
 */
 
-const url = `mongodb+srv://juhatauriainen:${password}@cluster0.a0yvhp1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const url = config.MONGODB_URI;
 
 mongoose.set('strictQuery', false);
 mongoose.connect(url);
@@ -40,8 +40,8 @@ const note = new Note({
 })
 
 note.save().then(result => {
-  console.log('note saved!')
-  console.log("result", result)
+  logger.info('note saved!')
+  logger.info("result", result)
   mongoose.connection.close()
 })
 */
@@ -50,11 +50,11 @@ Note.find({
   important: true,
   mysql: 'vaatii sen',
 }).then((results) => {
-  console.log('results', results);
+  logger.info('results', results);
 
   results.forEach((result) => {
     // eslint-disable-next-line
-    console.log(`result ${result._id}`, result);
+    logger.info(`result ${result._id}`, result);
   });
 
   mongoose.connection.close();

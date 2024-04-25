@@ -1,14 +1,12 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
+const logger = require('../utils/logger');
+const config = require('../utils/config');
 
-const { MONGODB_USERNAME, MONGODB_PASSWORD } = process.env;
-
-console.log('process.argv', process.argv);
-console.log('username', MONGODB_USERNAME);
-console.log('password', MONGODB_PASSWORD);
+logger.info('config', config);
 
 // ÄLÄ KOSKAAN TALLETA SALASANOJA GitHubiin!
-const url = `mongodb+srv://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@cluster0.a0yvhp1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const url = config.MONGODB_URI;
 
 mongoose.set('strictQuery', false);
 mongoose.connect(url);
