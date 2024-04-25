@@ -1,5 +1,4 @@
 const notesRouter = require('express').Router();
-
 const { body, validationResult } = require('express-validator');
 const Note = require('../models/note');
 const logger = require('../utils/logger');

@@ -1,15 +1,8 @@
-require('dotenv').config();
 const mongoose = require('mongoose');
 const logger = require('../utils/logger');
 const config = require('../utils/config');
 
 logger.info('config', config);
-
-// ÄLÄ KOSKAAN TALLETA SALASANOJA GitHubiin!
-const url = config.MONGODB_URI;
-
-mongoose.set('strictQuery', false);
-mongoose.connect(url);
 
 const noteSchema = new mongoose.Schema({
   content: {
