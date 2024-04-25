@@ -17,6 +17,12 @@ export default [
   { languageOptions: { globals: globals.browser } },
   ...compat.extends("airbnb-base"),
   {
-    plugins: {stylistic}
+    plugins: { stylistic },
+    rules: {
+      'no-console': 0
+    },
+  },
+  {
+    ignores: ["dist", "eslint.config.mjs"],
   }
 ];

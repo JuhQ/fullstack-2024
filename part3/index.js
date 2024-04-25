@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -47,7 +49,7 @@ app.get('/api/notes/:id', (request, response, next) => {
         });
       }
     })
-    .catch((error) => {
+    .catch(() => {
       next(new Error('malformatted id'));
     });
 });
@@ -82,12 +84,14 @@ app.post(
     });
 
     note.save()
-      .then((result) => {
+      .then((savedNote) => {
         console.log('note saved!');
-        console.log('result', result);
-        response.status(201).json(result);
+        console.log('result', savedNote);
+        response.status(201).json(savedNote);
       })
       .catch(next);
+
+    return next();
   },
 );
 
@@ -112,7 +116,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint);
 
-const handleErrors = (error, request, response, next) => {
+const handleErrors = (error, request, response) => {
   console.error(error);
   response.status(400).json({ error: error.message || error });
 };
