@@ -11,7 +11,8 @@
     "build:ui": "rm -fr dist && cd ../part2 && npm run build && cp -r dist ../part3",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "test": "node --test"
   },
   "author": "Juha Tauriainen",
   "license": "ISC",
