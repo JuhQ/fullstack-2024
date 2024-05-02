@@ -67,8 +67,6 @@ notesRouter.post(
         response.status(201).json(savedNote);
       })
       .catch(next);
-
-    return next();
   },
 );
 
@@ -76,7 +74,7 @@ notesRouter.put('/:id', (request, response, next) => {
   const { id } = request.body;
   const note = {
     content: request.body.content,
-    impotant: request.body.important || false,
+    important: request.body.important || false,
   };
 
   Note.findByIdAndUpdate(id, note, { new: true, runValidators: true, context: 'query' })
