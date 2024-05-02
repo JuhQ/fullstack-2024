@@ -18,4 +18,8 @@ describe('average', () => {
   test('of empty array is zero', () => {
     assert.strictEqual(average([]), 0);
   });
+
+  test("should return 0 given undefined value", () => {
+    assert.strictEqual(average(), 0);
+  });
 });

@@ -3,7 +3,7 @@ const reverse = (string) => string.split('').reverse().join('');
 const sort = (lista) => [...lista].sort((a, b) => a - b);
 
 const average = (taulukko) => {
-  if (!taulukko.length) {
+  if (!taulukko?.length) {
     return 0;
   }
 
