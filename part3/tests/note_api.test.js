@@ -6,32 +6,13 @@ const mongoose = require("mongoose")
 const supertest = require("supertest")
 const app = require("../app")
 const Note = require("../models/note")
+const { initialNotes, notesInDb } = require("./test_helper")
 
 const api = supertest(app)
 
-const initialNotes = [
-    {
-        content: 'HTML is easy',
-        important: false,
-    },
-    {
-        content: 'Browser can execute only JavaScript',
-        important: true,
-    },
-    {
-        content: 'Browser can execute only JavaScript',
-        important: true,
-    },
-]
-
 beforeEach(async () => {
     await Note.deleteMany({})
-
-    let noteObject = new Note(initialNotes[0])
-    await noteObject.save()
-
-    noteObject = new Note(initialNotes[1])
-    await noteObject.save()
+    await Note.insertMany(initialNotes)
 })
 
 describe("notes api", () => {
@@ -62,12 +43,40 @@ describe("notes api", () => {
         assert.strictEqual(contents.content, "HTML is easy")
     })
 
+    describe("get methods", () => {
+        // skipped because beforeEach note saving has race condition
+        // TODO unskip when race condition fixed
+        test("should get note with id", async () => {
+            const notesAtStart = await notesInDb()
+            const { id } = notesAtStart[0]
+
+            const response = await api.get(`/api/notes/${id}`).expect(200)
+
+            const { content, important } = response.body
+
+            assert.deepStrictEqual(
+                { content, important },
+                {
+                    content: 'HTML is easy',
+                    important: false
+                })
+        })
+
+        test.skip("should not get note with invalid id", async () => {
+            await api.get("/api/notes/invalid-id-here")
+                .expect(500)
+        })
+    })
+
     describe("post methods", () => {
         test("a valid note can be added", async () => {
             const newNote = {
                 content: "async/await is cool",
                 important: true
             }
+
+            const responseBefore = await api.get("/api/notes")
+            assert.strictEqual(responseBefore.body.length, 2)
 
             await api.post("/api/notes")
                 .send(newNote)
@@ -122,6 +131,22 @@ describe("notes api", () => {
             const response = await api.get("/api/notes")
             assert.strictEqual(response.body.length, 3)
             assert.strictEqual(response.body[2].important, false)
+        })
+    })
+
+    describe("delete methods", () => {
+        test("should delete note", async () => {
+            const notesAtStart = await notesInDb()
+            const noteToDelete = notesAtStart[0]
+
+            await api.delete(`/api/notes/${noteToDelete.id}`).expect(204)
+
+            const notesAtEnd = await notesInDb()
+
+            const contents = notesAtEnd.map(({ content }) => content)
+
+            assert(!contents.includes(noteToDelete.content))
+            assert.strictEqual(notesAtEnd.length, 1)
         })
     })
 })
