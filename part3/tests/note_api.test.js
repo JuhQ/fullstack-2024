@@ -44,8 +44,6 @@ describe("notes api", () => {
     })
 
     describe("get methods", () => {
-        // skipped because beforeEach note saving has race condition
-        // TODO unskip when race condition fixed
         test("should get note with id", async () => {
             const notesAtStart = await notesInDb()
             const { id } = notesAtStart[0]
