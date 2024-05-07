@@ -60,12 +60,6 @@ describe("notes api", () => {
                 })
         })
 
-        test("should not get note with invalid id", async () => {
-            await api.get("/api/notes/invalid-id-here")
-                .expect(400)
-        })
-
-
         test('succeeds with a valid id', async () => {
             const notesAtStart = await notesInDb()
 
@@ -87,12 +81,33 @@ describe("notes api", () => {
                 .expect(404)
         })
 
-        test('fails with statuscode 400 id is invalid', async () => {
-            const invalidId = '5a3d5da59070081a82a3445'
+        describe("invalid id", () => {
 
-            await api
-                .get(`/api/notes/${invalidId}`)
-                .expect(400)
+            test('fails with statuscode 400 id is invalid, given mongodb type id', async () => {
+                const invalidId = '5a3d5da59070081a82a3445'
+
+                await api
+                    .get(`/api/notes/${invalidId}`)
+                    .expect(400)
+            })
+
+            test("should not get note with invalid id, given regular string", async () => {
+                await api
+                    .get("/api/notes/invalid-id-here")
+                    .expect(400)
+            })
+
+            test("should not get note with invalid id, given numeric string", async () => {
+                await api
+                    .get("/api/notes/123")
+                    .expect(400)
+            })
+
+            test("should not get note with invalid id, given object string representation", async () => {
+                await api
+                    .get("/api/notes/{id:123}")
+                    .expect(400)
+            })
         })
     })
 
