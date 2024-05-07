@@ -6,7 +6,7 @@ const mongoose = require("mongoose")
 const supertest = require("supertest")
 const app = require("../app")
 const Note = require("../models/note")
-const { initialNotes, notesInDb } = require("./test_helper")
+const { initialNotes, notesInDb, nonExistingId } = require("./test_helper")
 
 const api = supertest(app)
 
@@ -60,9 +60,39 @@ describe("notes api", () => {
                 })
         })
 
-        test.skip("should not get note with invalid id", async () => {
+        test("should not get note with invalid id", async () => {
             await api.get("/api/notes/invalid-id-here")
-                .expect(500)
+                .expect(400)
+        })
+
+
+        test('succeeds with a valid id', async () => {
+            const notesAtStart = await notesInDb()
+
+            const noteToView = notesAtStart[0]
+
+            const resultNote = await api
+                .get(`/api/notes/${noteToView.id}`)
+                .expect(200)
+                .expect('Content-Type', /application\/json/)
+
+            assert.deepStrictEqual(resultNote.body, noteToView)
+        })
+
+        test('fails with statuscode 404 if note does not exist', async () => {
+            const validNonexistingId = await nonExistingId()
+
+            await api
+                .get(`/api/notes/${validNonexistingId}`)
+                .expect(404)
+        })
+
+        test('fails with statuscode 400 id is invalid', async () => {
+            const invalidId = '5a3d5da59070081a82a3445'
+
+            await api
+                .get(`/api/notes/${invalidId}`)
+                .expect(400)
         })
     })
 
@@ -96,7 +126,7 @@ describe("notes api", () => {
 
             await api.post("/api/notes")
                 .send(newNote)
-                .expect(500)
+                .expect(400)
 
             const response = await api.get("/api/notes")
             assert.strictEqual(response.body.length, 2)
@@ -109,7 +139,7 @@ describe("notes api", () => {
 
             await api.post("/api/notes")
                 .send(newNote)
-                .expect(500)
+                .expect(400)
 
             const response = await api.get("/api/notes")
             assert.strictEqual(response.body.length, 2)

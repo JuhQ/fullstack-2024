@@ -12,6 +12,7 @@ notesRouter.get('', async (request, response, next) => {
 notesRouter.get('/:id', (request, response, next) => {
   logger.info('request.params', request.params);
 
+  console.log("id", request.params.id)
   Note.findById(request.params.id)
     .then((note) => {
       if (note) {

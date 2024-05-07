@@ -6,6 +6,7 @@ const notesRouter = require('./controllers/notes');
 const { requestLogger, unknownEndpoint, handleErrors } = require('./middlewares/middleware');
 const config = require('./utils/config');
 require("express-async-errors")
+
 mongoose.set('strictQuery', false);
 mongoose.connect(config.MONGODB_URI);
 

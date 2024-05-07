@@ -16,7 +16,8 @@ const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint', path });
 };
 
-const handleErrors = (error, request, response) => {
+// https://expressjs.com/en/guide/using-middleware.html#middleware.error-handling
+const handleErrors = (error, request, response, next) => {
   console.error(error);
   response.status(400).json({ error: error.message || error });
 };
