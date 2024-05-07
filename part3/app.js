@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const notesRouter = require('./controllers/notes');
 const { requestLogger, unknownEndpoint, handleErrors } = require('./middlewares/middleware');
 const config = require('./utils/config');
+const usersRouter = require('./controllers/users');
 require("express-async-errors")
 
 mongoose.set('strictQuery', false);
@@ -19,6 +20,7 @@ app.use(cors());
 app.use(requestLogger);
 
 app.use('/api/notes', notesRouter);
+app.use('/api/users', usersRouter);
 
 app.use(unknownEndpoint); // 404
 app.use(handleErrors); // kaikki errorit
