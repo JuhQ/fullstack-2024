@@ -2,9 +2,28 @@ const notesRouter = require('express').Router();
 const { body, validationResult } = require('express-validator');
 const Note = require('../models/note');
 const logger = require('../utils/logger');
+const User = require('../models/user');
+const jwt = require("jsonwebtoken")
+
+const getTokenFrom = (request) => {
+  const authorization = request.get("authorization")
+  const bearerStart = "Bearer "
+
+  if(authorization && authorization.startsWith(bearerStart)) {
+    return authorization.replace(bearerStart, "")
+  }
+
+  return null
+}
 
 notesRouter.get('', async (request, response, next) => {
-  const notes = await Note.find({})
+  const notes = await Note
+    .find({})
+    .populate("user", {
+      username: 1,
+      name: 1
+    })
+
   response.json(notes)
 });
 
@@ -46,18 +65,30 @@ notesRouter.post(
       return next(result.errors.map(({ msg, path }) => `${path}: ${msg}`));
     }
 
+    const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+
+    if(!decodedToken.id) {
+      return next("token invalid")
+    }
+
     logger.info('body', request.body);
     logger.info('body content', request.body.content);
     logger.info('body important', request.body.important);
+
+    const user = await User.findById(decodedToken.id)
 
     // spread syntax
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
     const note = new Note({
       content: request.body.content,
       important: request.body.important || false,
+      user: user._id
     });
 
     const savedNote = await note.save()
+
+    user.notes = user.notes.concat(savedNote._id)
+    await user.save()
 
     logger.info('note saved!');
     logger.info('result', savedNote);

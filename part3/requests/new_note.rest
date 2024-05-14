@@ -1,5 +1,17 @@
+# @name login
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+    "username": "root",
+    "password": "sekret"
+}
+
+
+### Tallenna uusi muistiinpano
 POST http://localhost:3001/api/notes
 Content-Type: application/json
+Authorization: Bearer {{ login.response.body.token }}
 
 {
     "content": "REST is easy",
@@ -16,6 +28,14 @@ Content-Type: application/json
 }
 
 
+### Tallenna uusi muistiinpano ilman userid:tä
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "REST is easy",
+    "important": true
+}
 
 ### Lähetetään content arvo tyhjänä
 # validoinnin tulisi estää tämä

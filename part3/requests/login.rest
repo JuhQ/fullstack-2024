@@ -1,0 +1,17 @@
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+    "username": "root",
+    "password": "sekret"
+}
+
+
+### lähetetään väärät tiedot kirjautumiseen
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+    "username": "tunnus-ei-toimi",
+    "password": "salasana-on-väärä"
+}

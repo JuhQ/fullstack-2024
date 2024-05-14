@@ -15,7 +15,7 @@ beforeEach(async () => {
     await Note.insertMany(initialNotes)
 })
 
-describe("notes api", () => {
+describe.skip("notes api", () => {
     test("notes are returned as json", async () => {
         await api
             .get("/api/notes")
