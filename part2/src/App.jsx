@@ -11,12 +11,22 @@ const App = () => {
   const [error, setError] = useState("")
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [user, setUser] = useState("")
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     noteService
       .getAll()
       .then(setNotes)
+  }, [])
+
+  useEffect(() => {
+    const loggedUserFromLocalstorage = window.localStorage.getItem("loggedNoteappUser")
+
+    if(loggedUserFromLocalstorage) {
+        const userData = JSON.parse(loggedUserFromLocalstorage)
+        noteService.setToken(userData.token)
+        setUser(userData)
+    }
   }, [])
 
   const addNote = (event) => {
@@ -30,8 +40,8 @@ const App = () => {
 
     noteService
       .create(noteObject)
-      .then(() => {
-        setNotes(notes.concat(noteObject))
+      .then((result) => {
+        setNotes(notes.concat(result))
         setNewNote('')
       })
       .catch((error) => setError(error.message))
@@ -69,16 +79,18 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    console.log("log in", username, password)
 
     try {
       const loginResult = await login({ username, password })
+      const { token } = loginResult
 
       setUser(loginResult)
+      noteService.setToken(token)
 
-      const { token } = loginResult
-      console.log("token", token)
-      console.log("login result", loginResult)
+      window.localStorage.setItem("loggedNoteappUser", JSON.stringify(loginResult))
+      setUsername("")
+      setPassword("")
+
     } catch (error) {
       setError(error.message)
 
@@ -138,12 +150,23 @@ const App = () => {
   return (
     <div>
 
-      {!user && loginForm()}{user && <div>
+      {!user && loginForm()}
+      
+      
+      {user && <div>
        <p>{user.username} logged in</p>
          {noteForm()}
       </div>
     }
 
+      
+{user && <div>
+      <button type="button" onClick={() => {
+        window.localStorage.removeItem("loggedNoteappUser")
+        setUser(null)
+      }}>Logout</button>
+      </div>
+    }
       <h1>Notes</h1>
 
       {error.length > 0 && <Notification message={`Virhe tapahtui! ${error}`} />}
