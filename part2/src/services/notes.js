@@ -5,7 +5,6 @@ const baseUrl = '/api/notes'
 let token = null
 
 const setToken = (newToken) => {
-    console.log("token asetetaan", newToken)
     token = `Bearer ${newToken}`
 }
 
