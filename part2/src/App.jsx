@@ -3,6 +3,8 @@ import Note from './components/Note'
 import Notification from './components/Notification'
 import noteService from './services/notes'
 import login from './services/login'
+import LoginForm from './components/LoginForm'
+import NoteForm from './components/NoteForm'
 
 const App = () => {
   const [notes, setNotes] = useState(null)
@@ -12,6 +14,7 @@ const App = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
+  const [loginVisible, setLoginVisible] = useState(false)
 
   useEffect(() => {
     noteService
@@ -22,10 +25,10 @@ const App = () => {
   useEffect(() => {
     const loggedUserFromLocalstorage = window.localStorage.getItem("loggedNoteappUser")
 
-    if(loggedUserFromLocalstorage) {
-        const userData = JSON.parse(loggedUserFromLocalstorage)
-        noteService.setToken(userData.token)
-        setUser(userData)
+    if (loggedUserFromLocalstorage) {
+      const userData = JSON.parse(loggedUserFromLocalstorage)
+      noteService.setToken(userData.token)
+      setUser(userData)
     }
   }, [])
 
@@ -90,7 +93,7 @@ const App = () => {
       window.localStorage.setItem("loggedNoteappUser", JSON.stringify(loginResult))
       setUsername("")
       setPassword("")
-
+      setLoginVisible(false)
     } catch (error) {
       setError(error.message)
 
@@ -108,65 +111,47 @@ const App = () => {
     ? notes
     : notes.filter(note => note.important)
 
-
-  const loginForm = () => {
-    return (<>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-
-        <button type="submit">Log in</button>
-      </form>
-    </>)
-  }
-
-
-  const noteForm = () => {
-    return (
-      <form onSubmit={addNote}>
-        <input
-          value={newNote}
-          onChange={handleNoteChange}
-        />
-        <button type="submit">save</button>
-      </form>)
-  }
-
   return (
     <div>
 
-      {!user && loginForm()}
-      
-      
-      {user && <div>
-       <p>{user.username} logged in</p>
-         {noteForm()}
-      </div>
-    }
+      {!user && loginVisible && <>
+        <LoginForm
+          handleSubmit={handleLogin}
+          handlePasswordChange={setPassword}
+          handleUsernameChange={setUsername}
+          username={username}
+          password={password}
+        />
+        <button type="button" onClick={() => setLoginVisible(false)}>
+          Cancel
+        </button>
+      </>
+      }
 
-      
-{user && <div>
-      <button type="button" onClick={() => {
-        window.localStorage.removeItem("loggedNoteappUser")
-        setUser(null)
-      }}>Logout</button>
+      {!user && !loginVisible && <button type="button" onClick={() => setLoginVisible(true)}>
+        Login
+      </button>
+      }
+
+
+      {user && <div>
+        <p>{user.username} logged in</p>
+        <NoteForm
+          addNote={addNote}
+          handleNoteChange={handleNoteChange}
+          newNote={newNote}
+        />
       </div>
-    }
+      }
+
+
+      {user && <div>
+        <button type="button" onClick={() => {
+          window.localStorage.removeItem("loggedNoteappUser")
+          setUser(null)
+        }}>Logout</button>
+      </div>
+      }
       <h1>Notes</h1>
 
       {error.length > 0 && <Notification message={`Virhe tapahtui! ${error}`} />}
