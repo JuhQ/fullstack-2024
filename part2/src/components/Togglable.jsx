@@ -8,9 +8,6 @@ const Togglable = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({ toggleShow }))
 
-
-  console.log('props', props)
-
   return (<>
     <div>
       <button type="button" onClick={toggleShow}>{props.buttonLabel}</button>
