@@ -5,40 +5,40 @@ const baseUrl = '/api/notes'
 let token = null
 
 const setToken = (newToken) => {
-    token = `Bearer ${newToken}`
+  token = `Bearer ${newToken}`
 }
 
 
 const getResponseData = (response) => response.data
 
 const getAll = () =>
-    axios
-        .get(baseUrl)
-        .then(getResponseData)
+  axios
+    .get(baseUrl)
+    .then(getResponseData)
 
 const create = async (note) => {
-    const config = {
-        headers: { Authorization: token }
-    }
+  const config = {
+    headers: { Authorization: token }
+  }
 
-    return axios
-        .post(baseUrl, note, config)
-        .then(getResponseData)
+  return axios
+    .post(baseUrl, note, config)
+    .then(getResponseData)
 }
 
 const update = (id, note) =>
-    axios.put(`${baseUrl}/${id}`, note)
-        .then(getResponseData)
+  axios.put(`${baseUrl}/${id}`, note)
+    .then(getResponseData)
 
 const deleteNote = (id) =>
-    axios
-        .delete(`${baseUrl}/${id}`)
-        .then(getResponseData)
+  axios
+    .delete(`${baseUrl}/${id}`)
+    .then(getResponseData)
 
 export default {
-    getAll,
-    create,
-    update,
-    delete: deleteNote,
-    setToken
+  getAll,
+  create,
+  update,
+  delete: deleteNote,
+  setToken
 }

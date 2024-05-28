@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Note from './components/Note'
 import Notification from './components/Notification'
 import noteService from './services/notes'
@@ -9,8 +9,9 @@ import Togglable from './components/Togglable'
 const App = () => {
   const [notes, setNotes] = useState(null)
   const [showAll, setShowAll] = useState(false)
-  const [error, setError] = useState("")
+  const [error, setError] = useState('')
   const [user, setUser] = useState(null)
+  const noteFormRef = useRef()
 
   useEffect(() => {
     noteService
@@ -19,7 +20,7 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    const loggedUserFromLocalstorage = window.localStorage.getItem("loggedNoteappUser")
+    const loggedUserFromLocalstorage = window.localStorage.getItem('loggedNoteappUser')
 
     if (loggedUserFromLocalstorage) {
       const userData = JSON.parse(loggedUserFromLocalstorage)
@@ -32,7 +33,7 @@ const App = () => {
     const note = notes.find(n => n.id === id)
     const changedNote = { ...note, important: !note.important }
 
-    setError("")
+    setError('')
 
     noteService
       .update(id, changedNote)
@@ -54,7 +55,7 @@ const App = () => {
 
 
   if (!notes) {
-    return null;
+    return null
   }
 
   const notesToShow = showAll
@@ -74,10 +75,13 @@ const App = () => {
 
       {user && <div>
         <p>{user.username} logged in</p>
-        <Togglable buttonLabel="Luo uusi muistiinpano">
+        <Togglable buttonLabel="Luo uusi muistiinpano" ref={noteFormRef}>
           <NoteForm
             onError={setError}
-            onCreate={(result) => setNotes(notes.concat(result))}
+            onCreate={(result) => {
+              setNotes(notes.concat(result))
+              noteFormRef.current.toggleShow()
+            }}
           />
         </Togglable>
       </div>
@@ -86,7 +90,7 @@ const App = () => {
 
       {user && <div>
         <button type="button" onClick={() => {
-          window.localStorage.removeItem("loggedNoteappUser")
+          window.localStorage.removeItem('loggedNoteappUser')
           setUser(null)
         }}>Logout</button>
       </div>

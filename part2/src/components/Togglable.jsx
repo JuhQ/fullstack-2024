@@ -1,18 +1,29 @@
-import { useState } from "react"
+import { forwardRef, useImperativeHandle, useState } from 'react'
+import PropTypes from 'prop-types'
 
-const Togglable = (props) => {
-    const [show, setShow] = useState(false)
+const Togglable = forwardRef((props, ref) => {
+  const [show, setShow] = useState(false)
 
-    return (<>
+  const toggleShow = () => setShow(!show)
 
-        <div>
-            <button type="button" onClick={() => setShow(!show)}>{props.buttonLabel}</button>
-        </div>
+  useImperativeHandle(ref, () => ({ toggleShow }))
 
-        {show && props.children}
 
-    </>)
+  console.log('props', props)
 
+  return (<>
+    <div>
+      <button type="button" onClick={toggleShow}>{props.buttonLabel}</button>
+    </div>
+
+    {show && props.children}
+  </>)
+})
+
+Togglable.displayName = 'Togglable'
+
+Togglable.propTypes = {
+  buttonLabel: PropTypes.string.isRequired
 }
 
 export default Togglable
