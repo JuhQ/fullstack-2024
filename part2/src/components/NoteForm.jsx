@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import noteService from '../services/notes'
 import PropTypes from 'prop-types'
 
 const NoteForm = ({ onCreate, onError }) => {
@@ -14,13 +13,7 @@ const NoteForm = ({ onCreate, onError }) => {
       important: Math.random() > 0.5
     }
 
-    noteService
-      .create(noteObject)
-      .then((result) => {
-        onCreate(result)
-        setNewNote('')
-      })
-      .catch((error) => onError(error.message))
+    onCreate(noteObject)
   }
 
   const handleNoteChange = (event) => {
@@ -33,6 +26,7 @@ const NoteForm = ({ onCreate, onError }) => {
       <input
         value={newNote}
         onChange={handleNoteChange}
+        placeholder='write new note here'
       />
       <button type="submit">save</button>
     </form>)

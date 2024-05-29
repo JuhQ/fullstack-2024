@@ -62,6 +62,16 @@ const App = () => {
     ? notes
     : notes.filter(note => note.important)
 
+  const addNote = (noteObject) => {
+    noteService
+      .create(noteObject)
+      .then((result) => {
+        setNotes(notes.concat(result))
+        noteFormRef.current.toggleShow()
+      })
+      .catch((error) => setError(error.message))
+  }
+
   return (
     <div>
 
@@ -78,10 +88,7 @@ const App = () => {
         <Togglable buttonLabel="Luo uusi muistiinpano" ref={noteFormRef}>
           <NoteForm
             onError={setError}
-            onCreate={(result) => {
-              setNotes(notes.concat(result))
-              noteFormRef.current.toggleShow()
-            }}
+            onCreate={addNote}
           />
         </Togglable>
       </div>
