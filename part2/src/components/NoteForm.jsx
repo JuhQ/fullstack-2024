@@ -1,5 +1,5 @@
-import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useState } from 'react'
 
 const NoteForm = ({ onCreate, onError }) => {
   const [newNote, setNewNote] = useState('')
@@ -10,7 +10,8 @@ const NoteForm = ({ onCreate, onError }) => {
 
     const noteObject = {
       content: newNote,
-      important: Math.random() > 0.5
+      important: true
+      //important: Math.random() > 0.5
     }
 
     onCreate(noteObject)

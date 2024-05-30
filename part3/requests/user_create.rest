@@ -1,0 +1,11 @@
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+"name": "testitunnus",
+"username": "root",
+"password": "sekret"
+}
+
+### Reset backend
+POST http://localhost:3001/api/testing/reset
