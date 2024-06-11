@@ -1,4 +1,6 @@
-const counterReducer = (state = 0, action) => {
+
+
+const counterReducer = (state = "hello", action) => {
 
     console.log("action", action)
 

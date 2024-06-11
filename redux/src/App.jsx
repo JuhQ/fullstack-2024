@@ -1,3 +1,5 @@
+/*
+
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -38,7 +40,7 @@ function App() {
 
 
       <button
-        onClick={e => store.dispatch({ type: 'INCREMENT' })}
+        onClick={e => store.dispatch({ type: 'INCREMENT', arvo: 123, nimi: "Juha" })}
       >
         plus
       </button>
@@ -56,5 +58,42 @@ function App() {
     </>
   )
 }
+
+export default App
+*/
+
+import store from "./store"
+
+const App = () => (
+  <div>
+    <button type="button"
+      onClick={() =>
+        store.dispatch({
+          type: 'NEW_NOTE',
+          payload: {
+            content: "napin takaa tullut sisältö redux storeen",
+            id: Math.random()
+          }
+        })
+      }
+    >lisää uusi note</button>
+    <ul>
+      {store.getState().map(note =>
+        <li key={note.id}>
+          {note.content}
+          <strong>
+            {note.important ? 'important' : ''}
+          </strong>
+          <button type="button" onClick={() =>
+            store.dispatch({
+              type: "TOGGLE_IMPORTANCE",
+              payload: { id: note.id }
+            })
+          }>toggle</button>
+        </li>
+      )}
+    </ul>
+  </div>
+)
 
 export default App
