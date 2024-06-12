@@ -13,4 +13,11 @@ const createNew = async (content) => {
     return response.data
 }
 
-export default { getAll, createNew }
+const toggleImportanceOf = async (note) => {
+    const object = {...note, important: !note.important}
+    const response = await axios.put(`${baseUrl}/${note.id}`, object)
+
+    return response.data
+}
+
+export default { getAll, createNew, toggleImportanceOf }
