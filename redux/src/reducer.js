@@ -1,9 +1,6 @@
 
 
 const counterReducer = (state = "hello", action) => {
-
-    console.log("action", action)
-
     if (action.type === "INCREMENT") {
         return state + 1
     }
