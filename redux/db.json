@@ -7,67 +7,112 @@
     },
     {
       "content": "state changes are made with actions",
-      "important": true,
+      "important": false,
       "id": "2"
     },
     {
       "content": "backend note",
-      "important": true,
+      "important": false,
       "id": "3"
     },
     {
-      "content": "from back to redux",
-      "important": true,
-      "id": "4"
-    },
-    {
-      "id": "999b",
-      "content": "????",
-      "important": true
-    },
-    {
-      "id": "5e2a",
-      "content": "douihdiouhd",
-      "important": true
-    },
-    {
-      "id": "1dbe",
-      "content": "asdfghjklöä",
+      "id": "da54",
+      "content": "",
       "important": false
     },
     {
-      "id": "12d5",
-      "content": "dsdsffdsfsd",
+      "id": "ba70",
+      "content": "",
       "important": true
     },
     {
-      "id": "fb13",
-      "content": "toimii?",
+      "id": "24cb",
+      "content": "",
       "important": false
     },
     {
-      "id": "4caa",
-      "content": "jes!",
-      "important": false
-    },
-    {
-      "id": "f889",
-      "content": "sfdfsfsasf",
-      "important": false
-    },
-    {
-      "id": "4e33",
-      "content": "asffqw3fwq",
+      "id": "fbc1",
+      "content": "asddas",
       "important": true
     },
     {
-      "id": "9531",
-      "content": "123455",
+      "id": "479a",
+      "content": "asfssdsqf",
       "important": true
     },
     {
-      "id": "214e",
-      "content": "?????????",
+      "id": "0f9b",
+      "content": "asddsdassda",
+      "important": true
+    },
+    {
+      "id": "2d72",
+      "content": "dsffdsfsdfsd",
+      "important": true
+    },
+    {
+      "id": "d5cc",
+      "content": "sdadsa",
+      "important": true
+    },
+    {
+      "id": "a2ca",
+      "content": "",
+      "important": true
+    },
+    {
+      "id": "6902",
+      "content": "sdfgdsf",
+      "important": false
+    },
+    {
+      "id": "2162",
+      "content": "sddgdfd",
+      "important": false
+    },
+    {
+      "id": "8f2b",
+      "content": "asddsdsa",
+      "important": false
+    },
+    {
+      "id": "5bc7",
+      "content": "fasfssddsa",
+      "important": false
+    },
+    {
+      "id": "db7b",
+      "content": "dasds",
+      "important": false
+    },
+    {
+      "id": "6377",
+      "content": "adssdff",
+      "important": false
+    },
+    {
+      "id": "2f45",
+      "content": "43534",
+      "important": false
+    },
+    {
+      "id": "b8f5",
+      "content": "234r323",
+      "important": true
+    },
+    {
+      "id": "3345",
+      "content": "fdfggfgffg",
+      "important": true
+    },
+    {
+      "id": "323e",
+      "content": "fdfdfd",
+      "important": true
+    },
+    {
+      "id": "0ca8",
+      "content": "ujpo",
       "important": true
     }
   ]
